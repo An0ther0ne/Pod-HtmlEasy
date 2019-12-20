@@ -118,8 +118,8 @@ $HTML_ENTITIES_RE = qr{$HTML_ENTITIES_RE}msx;
 # from the same characters that get converted to entity names
 sub _nul_escape {
     my $txt_ref = shift;
-
-    ${$txt_ref} =~ s{($HTML_ENTITIES_RE)}{$NUL$1}gsmx;
+#   ${$txt_ref} =~ s{($HTML_ENTITIES_RE)}{$NUL$1}gsmx;
+   ${$txt_ref} =~ s{($HTML_ENTITIES_RE)}{$1}gsmx;
     return;
 }
 
@@ -147,7 +147,8 @@ sub _encode_entities {
 
         # $chr gets a lookbehind to avoid converting flagged from E<...>
         my $re = qq{(?<!$NUL)$chr};
-        ${$txt_ref} =~ s{$re}{$NUL&$HTML_ENTITIES{$chr};}gsmx;
+#       ${$txt_ref} =~ s{$re}{$NUL&$HTML_ENTITIES{$chr};}gsmx;
+        ${$txt_ref} =~ s{$re}{&$HTML_ENTITIES{$chr};}gsmx;
     }
 
     return;
@@ -165,6 +166,7 @@ sub _encode_entities {
 
 sub _add_uri_href {
     my ($txt_ref) = @_;
+
 
     if ( ${$txt_ref} =~ m{https?:}smx ) {
 
@@ -189,6 +191,7 @@ sub _add_uri_href {
    #       my $host = $3;
    #       $uri =~ s{[^/\w]+\z}{}mx;
    #       ${$txt_ref} =~ s{$uri}{<a href='$uri' target='_blank'>$host</a>}mx;
+	return if ${$txt_ref} =~ /^<pre>/;
         ${$txt_ref}
             =~ s{$RE{URI}{HTTP}{-keep}{-scheme=>'https?'}}{<a href='$1' target='_blank'>$3</a>}gsmx;
 
@@ -460,10 +463,10 @@ sub interior_sequence {
                 return EMPTY;
             }
             my @parsed = Pod::ParseLink::parselink($seq_argument);
-            foreach (@parsed) {
-                if ( defined $_ ) { _encode_entities( \$_ ); }
-            }
-
+# This is double encode
+#            foreach (@parsed) {
+#                if ( defined $_ ) { _encode_entities( \$_ ); }
+#            }
             # Encoding handled in ON_L()
             $ret = $parser->{POD_HTMLEASY}
                 ->{ON_L}( $parser->{POD_HTMLEASY}, @parsed );
@@ -493,7 +496,6 @@ sub interior_sequence {
 
     # Escape HTML-significant characters
     _nul_escape( \$ret );
-
     return $ret;
 }
 
