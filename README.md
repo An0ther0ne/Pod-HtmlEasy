@@ -12,7 +12,7 @@ under the same terms as Perl itself.
 
 # Versions
 
-
+* v1.1.11a
 
 # BUGS FIXED
 
