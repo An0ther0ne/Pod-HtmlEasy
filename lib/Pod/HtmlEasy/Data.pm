@@ -42,7 +42,8 @@ sub FALSE { return 0; }
 sub head {
     return q{<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">},
         q{<html><head>},
-        q{<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">};
+#       q{<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">};
+        q{<meta http-equiv="Content-Type" content="text/html; charset=Windows-1251">};
 }
 
 sub headend { return q{</head>}; }
@@ -140,11 +141,19 @@ sub css {
     my $css = << "END_CSS";
 /* Properties that apply to the entire HTML file produced */
 BODY {
-    background: white;
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    color: #212529;
+    text-align: left;
+    background-color: #fff
+    padding: 1ex;
+/*  background: white;
     color: black;
     font-family: arial,sans-serif;
     margin: 0;
-    padding: 1ex;
+    padding: 1ex; */
 }
 /* The links; no change once visited */
 A:link, A:visited {
@@ -192,6 +201,12 @@ DIV {
 .toc li {
     line-height: 1.2em;
     list-style-type: none;
+}
+code {
+    background: #edf2f5;	
+    word-break:break-word;
+    border:1px solid #ccc;
+    padding:2px 5px
 }
 
 END_CSS
